@@ -67,3 +67,16 @@ Here are some things to consider to choose which one we will use.
 
 We define CRUD methods in `db/query/` then generate the go functions with `make sqlc`
 
+## Test the app
+
+During the development, we can test the app with the help of some tools. For go, we can use [testify](https://github.com/stretchr/testify)
+
+With the `-cover` option, we can see how much of our code is tested.
+
+Also VSCode help us to see the coverage with the use of `run package test` who show us which part of our code are really tested.
+
+It's possible to launch the test with the following command:
+
+```bash
+make test
+```
