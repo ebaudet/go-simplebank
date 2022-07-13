@@ -32,3 +32,15 @@ docker start postgres14
 ```
 
 We can manage our postgres database with tools like [TablePlus](https://tableplus.com/).
+
+## Database migration
+
+We can use this [migrate tool](https://github.com/golang-migrate/migrate/) to manage our migration, version of database.
+
+```bash
+migrate create -ext sql -dir db/migration -seq init_schema
+
+migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" -verbose up
+```
+
+then fill the migration up with our schema and down with `drop table`.
