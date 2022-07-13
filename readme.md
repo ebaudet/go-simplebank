@@ -44,3 +44,15 @@ migrate -path db/migration -database "postgresql://root:secret@localhost:5432/si
 ```
 
 then fill the migration up with our schema and down with `drop table`.
+
+## Makefile instructions
+
+```bash
+# create and launch container
+make postgres
+# create database
+make createdb
+# push the migrations
+make migrateup
+```
+
