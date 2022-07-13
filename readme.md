@@ -80,3 +80,38 @@ It's possible to launch the test with the following command:
 ```bash
 make test
 ```
+
+## ACID (Atomicity, Consistency, Isolation, Durability)
+
+![acid](acid.png)
+
+The transactions in a database <u>must respect</u> the ACID properties :
+
+- Atomicity (A) : Either all operations complete successfully or the transaction fails and the db is unchanged.
+- Consistency (C) : The db must be valid after the transaction. All constraints must be satisfied.
+- Isolation (I) : Concurrent transactions must not affect each other.
+- Durability (D) : Data written by a successful transaction must be recorded in persistent storage.
+
+These process are implemented in db management systems like MySQL or PostgreSQL and there might be errors, timeout or deadlock who need to be managed in our go application.
+
+### Comparation between MySQL and PostgreSQL :
+
+| <u>MySQL:</u> | read uncommitted | read committed | reapeatable read | serialisable |
+|---------------|------------------|----------------|------------------|--------------|
+| dirty read           | ok        | x              |x                 | x            |
+| non-reapeatable read | ok        | ok             | x                | x            |
+| phantom read         | ok        | ok             | x                | x            |
+|serialization anomaly | ok        | ok             | ok               | x            |
+
+| <u>PostgreSQL:</u> | read uncommitted | read committed | reapeatable read | serialisable |
+|--------------------|------------------|----------------|------------------|--------------|
+| dirty read           | x              | x              |x                 | x            |
+| non-reapeatable read | ok             | ok             | x                | x            |
+| phantom read         | ok             | ok             | x                | x            |
+|serialization anomaly | ok             | ok             | ok               | x            |
+
+|                      |     MySQL          |     PostgreSQL          |
+|----------------------|--------------------|-------------------------|
+|                      | 4 isolation levels | 3 isolation levels      |
+|                      | locking mechanism  | dependencies detections |
+| deft isolation state | repeatable read    | read committed          |
