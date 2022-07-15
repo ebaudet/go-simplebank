@@ -1,5 +1,3 @@
--- CREATE --
-
 -- name: CreateEntry :one
 INSERT INTO entries (
   account_id, amount
@@ -7,8 +5,6 @@ INSERT INTO entries (
   $1, $2
 )
 RETURNING *;
-
--- READ --
 
 -- name: GetEntry :one
 SELECT * FROM entries
@@ -21,15 +17,11 @@ ORDER BY id
 LIMIT $2
 OFFSET $3;
 
--- UPDATE --
-
 -- name: UpdateEntry :one
 UPDATE entries
 set amount = $2
 WHERE id = $1
 RETURNING *;
-
--- DELETE --
 
 -- name: DeleteEntry :exec
 DELETE FROM entries

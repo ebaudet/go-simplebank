@@ -10,7 +10,6 @@ import (
 )
 
 const createTransfer = `-- name: CreateTransfer :one
-
 INSERT INTO transfers (
   from_account_id, to_account_id, amount
 ) VALUES (
@@ -25,7 +24,6 @@ type CreateTransferParams struct {
 	Amount        int64 `json:"amount"`
 }
 
-// CREATE --
 func (q *Queries) CreateTransfer(ctx context.Context, arg CreateTransferParams) (Transfer, error) {
 	row := q.db.QueryRowContext(ctx, createTransfer, arg.FromAccountID, arg.ToAccountID, arg.Amount)
 	var i Transfer
@@ -40,24 +38,20 @@ func (q *Queries) CreateTransfer(ctx context.Context, arg CreateTransferParams) 
 }
 
 const deleteTransfer = `-- name: DeleteTransfer :exec
-
 DELETE FROM transfers
 WHERE id = $1
 `
 
-// DELETE --
 func (q *Queries) DeleteTransfer(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteTransfer, id)
 	return err
 }
 
 const getTransfer = `-- name: GetTransfer :one
-
 SELECT id, from_account_id, to_account_id, amount, created_at FROM transfers
 WHERE id = $1 LIMIT 1
 `
 
-// READ --
 func (q *Queries) GetTransfer(ctx context.Context, id int64) (Transfer, error) {
 	row := q.db.QueryRowContext(ctx, getTransfer, id)
 	var i Transfer
@@ -121,7 +115,6 @@ func (q *Queries) ListTransfers(ctx context.Context, arg ListTransfersParams) ([
 }
 
 const updateTransfer = `-- name: UpdateTransfer :one
-
 UPDATE transfers
 set amount = $2
 WHERE id = $1
@@ -133,7 +126,6 @@ type UpdateTransferParams struct {
 	Amount int64 `json:"amount"`
 }
 
-// UPDATE --
 func (q *Queries) UpdateTransfer(ctx context.Context, arg UpdateTransferParams) (Transfer, error) {
 	row := q.db.QueryRowContext(ctx, updateTransfer, arg.ID, arg.Amount)
 	var i Transfer

@@ -10,7 +10,6 @@ import (
 )
 
 const createEntry = `-- name: CreateEntry :one
-
 INSERT INTO entries (
   account_id, amount
 ) VALUES (
@@ -24,7 +23,6 @@ type CreateEntryParams struct {
 	Amount    int64 `json:"amount"`
 }
 
-// CREATE --
 func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry, error) {
 	row := q.db.QueryRowContext(ctx, createEntry, arg.AccountID, arg.Amount)
 	var i Entry
@@ -38,24 +36,20 @@ func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry
 }
 
 const deleteEntry = `-- name: DeleteEntry :exec
-
 DELETE FROM entries
 WHERE id = $1
 `
 
-// DELETE --
 func (q *Queries) DeleteEntry(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteEntry, id)
 	return err
 }
 
 const getEntry = `-- name: GetEntry :one
-
 SELECT id, account_id, amount, created_at FROM entries
 WHERE id = $1 LIMIT 1
 `
 
-// READ --
 func (q *Queries) GetEntry(ctx context.Context, id int64) (Entry, error) {
 	row := q.db.QueryRowContext(ctx, getEntry, id)
 	var i Entry
@@ -111,7 +105,6 @@ func (q *Queries) ListEntries(ctx context.Context, arg ListEntriesParams) ([]Ent
 }
 
 const updateEntry = `-- name: UpdateEntry :one
-
 UPDATE entries
 set amount = $2
 WHERE id = $1
@@ -123,7 +116,6 @@ type UpdateEntryParams struct {
 	Amount int64 `json:"amount"`
 }
 
-// UPDATE --
 func (q *Queries) UpdateEntry(ctx context.Context, arg UpdateEntryParams) (Entry, error) {
 	row := q.db.QueryRowContext(ctx, updateEntry, arg.ID, arg.Amount)
 	var i Entry

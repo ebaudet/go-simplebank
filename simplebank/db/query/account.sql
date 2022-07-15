@@ -1,5 +1,3 @@
--- CREATE --
-
 -- name: CreateAccount :one
 INSERT INTO accounts (
   owner, balance, currency
@@ -7,8 +5,6 @@ INSERT INTO accounts (
   $1, $2, $3
 )
 RETURNING *;
-
--- READ --
 
 -- name: GetAccount :one
 SELECT * FROM accounts
@@ -25,8 +21,6 @@ ORDER BY id
 LIMIT $1
 OFFSET $2;
 
--- UPDATE --
-
 -- name: UpdateAccount :one
 UPDATE accounts
 set balance = $2
@@ -38,8 +32,6 @@ UPDATE accounts
 set balance = balance + sqlc.arg(amount)
 WHERE id = sqlc.arg(id)
 RETURNING *;
-
--- DELETE --
 
 -- name: DeleteAccount :exec
 DELETE FROM accounts

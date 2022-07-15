@@ -1,5 +1,3 @@
--- CREATE --
-
 -- name: CreateTransfer :one
 INSERT INTO transfers (
   from_account_id, to_account_id, amount
@@ -7,8 +5,6 @@ INSERT INTO transfers (
   $1, $2, $3
 )
 RETURNING *;
-
--- READ --
 
 -- name: GetTransfer :one
 SELECT * FROM transfers
@@ -21,15 +17,11 @@ ORDER BY id
 LIMIT $3
 OFFSET $4;
 
--- UPDATE --
-
 -- name: UpdateTransfer :one
 UPDATE transfers
 set amount = $2
 WHERE id = $1
 RETURNING *;
-
--- DELETE --
 
 -- name: DeleteTransfer :exec
 DELETE FROM transfers
