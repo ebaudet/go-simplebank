@@ -61,7 +61,7 @@ make migrateup
 We can use various tools with golang to work with databases.
 
 Here are some things to consider to choose which one we will use.
-![database tools](golang-sql-tools.png)
+![database tools](assets/golang-sql-tools.png)
 
 [SQLC](https://sqlc.dev/) seems to be the more efficient.
 
@@ -83,7 +83,7 @@ make test
 
 ## ACID (Atomicity, Consistency, Isolation, Durability)
 
-![acid](acid.png)
+![acid](assets/acid.png)
 
 The transactions in a database <u>must respect</u> the ACID properties :
 
