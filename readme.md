@@ -140,3 +140,22 @@ Semantics of HTTP methods:
 - PATCH: Partially update resource’s state.
 - DELETE: Delete the target resource’s state.
 - OPTIONS: Advertising the available methods.
+
+## Load config from file & environment variables
+
+When we work with a docker or various environment, it is a good practice to separate some informatiosn from the rest of the code and make our system works with `ENV VARS` for a better organization.
+
+For that purpose, we can use a tool like [viper](https://github.com/spf13/viper) to help us.
+
+Now we can override our configuration like that :
+
+```bash
+$ SERVER_ADDRESS=0.0.0.0:8081 make server
+...
+[GIN-debug] Listening and serving HTTP on 0.0.0.0:8081
+
+# or
+$ make server -e SERVER_ADDRESS=0.0.0.0:8081
+...
+[GIN-debug] Listening and serving HTTP on 0.0.0.0:8081
+```
