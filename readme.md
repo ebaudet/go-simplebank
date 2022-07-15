@@ -143,7 +143,7 @@ Semantics of HTTP methods:
 
 ## Load config from file & environment variables
 
-When we work with a docker or various environment, it is a good practice to separate some informatiosn from the rest of the code and make our system works with `ENV VARS` for a better organization.
+When we work with a docker or various environment, it is a good practice to separate some information from the rest of the code and make our system works with `ENV VARS` for a better organization.
 
 For that purpose, we can use a tool like [viper](https://github.com/spf13/viper) to help us.
 
@@ -158,4 +158,53 @@ $ SERVER_ADDRESS=0.0.0.0:8081 make server
 $ make server -e SERVER_ADDRESS=0.0.0.0:8081
 ...
 [GIN-debug] Listening and serving HTTP on 0.0.0.0:8081
+```
+
+## Mock DB for testing HTTP API
+
+A mock DB is a fake database with the same definition of our real DB, in order to make all test on it without modifying the working environment.
+
+There are various way to implement that:
+
+- ### Use fake DB: Memory
+
+> Implement a fake version of BD: store data in memory:
+> - (+) simple approach
+> - (+) easy to implement
+> - (-) require lot of code for testing which is time consuming for development and maintenance later
+
+```go
+type Store interface {
+    GetAccount(id int64) (Account, error)
+}
+
+type MemStore struct {
+    data map[int64]Account
+}
+
+func (store *MemStore) GetAccount(id int64) (Account, error) {
+    return store.data[id], nil
+}
+```
+
+- ### Use DB Stubs: GoMock
+> Generate and build stubs that returns hard-coded values
+>
+> https://github.com/golang/mock
+
+```go
+func TestGetAccountAPI(t *testing.T){
+    ctrl := gomock.NewController(t)
+    defer ctrl.Finish()
+
+    store := mockdb.NewMockStore(ctrl)
+    account := randomAccount()
+
+    // Build stub: expect GetAccount() to be called
+    // exactly 1 time with this input account.ID
+    // and return this account object as output
+    store.EXPECT().GetAccount(gomock.Eq(account.ID)).Times(1).Return(account)
+
+    // TODO: use this mock store to test your API
+}
 ```
