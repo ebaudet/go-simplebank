@@ -115,3 +115,13 @@ These process are implemented in db management systems like MySQL or PostgreSQL 
 |                      | 4 isolation levels | 3 isolation levels      |
 |                      | locking mechanism  | dependencies detections |
 | deft isolation state | repeatable read    | read committed          |
+
+
+## Choose a Framework or a HTTP router for our Golang project
+
+There are a lot of projects that exist in Golang to help us to create a HTTP app.
+
+![list of frameworks and http routers](assets/web_frameworks-http_routers.png)
+
+In this project, we will choose [Gin](https://github.com/gin-gonic/gin) who is a really popular and fast web framework. It will also help us a lot to manage basics part of a HTTP application.
+
