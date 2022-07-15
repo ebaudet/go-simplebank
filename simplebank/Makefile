@@ -23,4 +23,7 @@ server:
 	docker start postgres14
 	go run main.go
 
+mock:
+	mockgen -destination db/mock/store.go -build_flags=--mod=mod -package mockdb github.com/ebaudet/simplebank/db/sqlc Store
+
 .PHONY: postgres createdb dropdb migrateup migratedown sqlc server

@@ -1,7 +1,11 @@
 {
     "cSpell.words": [
+        "gomock",
         "mapstructure",
+        "mockdb",
+        "simplebank",
         "sqlc",
-        "sslmode"
+        "sslmode",
+        "stretchr"
     ]
 }

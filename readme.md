@@ -208,3 +208,11 @@ func TestGetAccountAPI(t *testing.T){
     // TODO: use this mock store to test your API
 }
 ```
+
+### Generate mock DB
+
+We can generate the mock with the following command:
+
+```bash
+make mock
+```
