@@ -125,3 +125,18 @@ There are a lot of projects that exist in Golang to help us to create a HTTP app
 
 In this project, we will choose [Gin](https://github.com/gin-gonic/gin) who is a really popular and fast web framework. It will also help us a lot to manage basics part of a HTTP application.
 
+## A RESTful HTTP API
+
+[<strong>Representational state transfer (REST)</strong>](https://en.wikipedia.org/wiki/Representational_state_transfer) is a software architectural style that describes a uniform interface between decoupled components in the Internet in a Client-Server architecture. REST defines four interface constraints:
+- Identification of resources
+- Manipulation of resources
+- Self-descriptive messages and
+- hypermedia as the engine of application state
+
+Semantics of HTTP methods:
+- GET:  Get a representation of the target resource’s state.
+- POST: Let the target resource process the representation enclosed in the request.
+- PUT:  Create or replace the state of the target resource with the state defined by the representation enclosed in the request.
+- PATCH: Partially update resource’s state.
+- DELETE: Delete the target resource’s state.
+- OPTIONS: Advertising the available methods.
