@@ -139,7 +139,7 @@ func (server *Server) debitAccount(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, account)
+	ctx.JSON(http.StatusOK, account)
 }
 
 type creditUriAccountRequest struct {
@@ -173,5 +173,5 @@ func (server *Server) creditAccount(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, account)
+	ctx.JSON(http.StatusOK, account)
 }
