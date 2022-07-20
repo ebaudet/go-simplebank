@@ -28,6 +28,10 @@ sqlc:
 test:
 	go test -v -cover ./...
 
+test_nocache:
+	go clean -testcache
+	make test
+
 server:
 	docker start postgres14
 	go run main.go
@@ -35,4 +39,4 @@ server:
 mock:
 	mockgen -destination db/mock/store.go -build_flags=--mod=mod -package mockdb github.com/ebaudet/simplebank/db/sqlc Store
 
-.PHONY: postgres createdb dropdb new_migration migrateup migrateup1 migratedown migratedown1 sqlc test server mock
+.PHONY: postgres createdb dropdb new_migration migrateup migrateup1 migratedown migratedown1 sqlc test test_nocache server mock
