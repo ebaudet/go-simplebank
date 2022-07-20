@@ -24,6 +24,8 @@ func NewServer(store db.Store) *Server {
 	server.router.PATCH("/accounts/:id/debit", server.debitAccount)
 	server.router.PATCH("/accounts/:id/credit", server.creditAccount)
 
+	server.router.POST("/transfers", server.createTransfer)
+
 	return server
 }
 

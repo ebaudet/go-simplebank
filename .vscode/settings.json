@@ -4,6 +4,7 @@
         "gonic",
         "mapstructure",
         "mockdb",
+        "oneof",
         "simplebank",
         "sqlc",
         "sslmode",
