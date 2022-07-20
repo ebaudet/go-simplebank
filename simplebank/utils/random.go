@@ -4,9 +4,13 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
+const passphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+"
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
@@ -41,4 +45,25 @@ func RandomMoney() int64 {
 func RandomCurrency() string {
 	currencies := SupportedCurrencies()
 	return currencies[rand.Intn(len(currencies))]
+}
+
+// RandomEmail generates a random email address.
+func RandomEmail() string {
+	return RandomString(6) + "@" + RandomString(int(RandomInt(3, 5))) + ".com"
+}
+
+// Generate a random password with numbers, letters and special characters
+func RandomPassword(length int) string {
+	var sb strings.Builder
+	k := len(passphabet)
+	for i := 0; i < length; i++ {
+		sb.WriteByte(passphabet[rand.Intn(k)])
+	}
+	return sb.String()
+}
+
+// RandomFullName returns a random full name
+func RandomFullName() string {
+	caser := cases.Title(language.English)
+	return caser.String(RandomString(6) + " " + RandomString(6))
 }
