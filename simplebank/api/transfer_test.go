@@ -18,9 +18,9 @@ import (
 
 func TestCreateTransferAPI(t *testing.T) {
 	fromAccount := randomAccount()
-	fromAccount.Currency = "USD"
+	fromAccount.Currency = utils.USD
 	toAccount := randomAccount()
-	toAccount.Currency = "USD"
+	toAccount.Currency = utils.USD
 	transfer := randomTransfer(fromAccount, toAccount)
 
 	testCases := []struct {
