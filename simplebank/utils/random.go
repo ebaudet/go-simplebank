@@ -11,6 +11,8 @@ import (
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
 const passphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+"
+const consonants = "bcdfghjklmnpqrstvwxyz"
+const vowels = "aeiou"
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
@@ -62,8 +64,23 @@ func RandomPassword(length int) string {
 	return sb.String()
 }
 
+// RandomSpeakableWord generates a random word that can be spoken of length n
+func RandomSpeakableWord(length int) string {
+	var sb strings.Builder
+	c := len(consonants)
+	v := len(vowels)
+	for i := 0; i < length; i++ {
+		if i%2 == 0 {
+			sb.WriteByte(consonants[rand.Intn(c)])
+		} else {
+			sb.WriteByte(vowels[rand.Intn(v)])
+		}
+	}
+	return sb.String()
+}
+
 // RandomFullName returns a random full name
 func RandomFullName() string {
 	caser := cases.Title(language.English)
-	return caser.String(RandomString(6) + " " + RandomString(6))
+	return caser.String(RandomSpeakableWord(int(RandomInt(4, 8))) + " " + RandomSpeakableWord(int(RandomInt(4, 8))))
 }
