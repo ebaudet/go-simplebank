@@ -58,12 +58,12 @@ func (server *Server) createUser(ctx *gin.Context) {
 	}
 
 	rsp := createUserResponse{
-    Username:          user.Username,
-    FullName:          user.FullName,
-    Email:             user.Email,
-    PasswordChangedAt: user.PasswordChangedAt,
-    CreatedAt:         user.CreatedAt,
-  }
+		Username:          user.Username,
+		FullName:          user.FullName,
+		Email:             user.Email,
+		PasswordChangedAt: user.PasswordChangedAt,
+		CreatedAt:         user.CreatedAt,
+	}
 
 	ctx.JSON(http.StatusCreated, rsp)
 }
