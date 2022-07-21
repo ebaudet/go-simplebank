@@ -1,11 +1,13 @@
 {
     "cSpell.words": [
+        "alphanum",
         "caser",
         "gomock",
         "gonic",
         "mapstructure",
         "mockdb",
         "oneof",
+        "passphabet",
         "simplebank",
         "sqlc",
         "sslmode",
