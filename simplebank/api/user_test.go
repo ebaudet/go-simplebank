@@ -34,7 +34,7 @@ func randomUser() (db.User, string) {
 }
 
 func requireBodyMatchUser(t *testing.T, body *bytes.Buffer, user db.User) {
-	userResponse := createUserResponse{
+	userRsp := userResponse{
 		Username:          user.Username,
 		FullName:          user.FullName,
 		Email:             user.Email,
@@ -45,10 +45,10 @@ func requireBodyMatchUser(t *testing.T, body *bytes.Buffer, user db.User) {
 	data, err := ioutil.ReadAll(body)
 	require.NoError(t, err)
 
-	var gotUserResponse createUserResponse
+	var gotUserResponse userResponse
 	err = json.Unmarshal(data, &gotUserResponse)
 	require.NoError(t, err)
-	require.Equal(t, userResponse, gotUserResponse)
+	require.Equal(t, userRsp, gotUserResponse)
 }
 
 type eqCreateUserParamsMatcher struct {
@@ -212,7 +212,7 @@ func TestCreateUserAPI(t *testing.T) {
 			// build stubs
 			tc.buildStubs(store)
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			// Marshal body data to JSON

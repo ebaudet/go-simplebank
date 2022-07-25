@@ -92,7 +92,7 @@ func TestGetAccountAPI(t *testing.T) {
 			// build stubs
 			tc.buildStubs(store)
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			url := fmt.Sprintf("/accounts/%d", tc.accountID)
@@ -188,7 +188,7 @@ func TestCreateAccountAPI(t *testing.T) {
 			// build stubs
 			tc.buildStubs(store)
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			// Marshal body data to JSON
@@ -233,7 +233,7 @@ func TestGetAccountsAPI(t *testing.T) {
 			buildStubs: func(store *mockdb.MockStore) {
 				arg := db.ListAccountsParams{
 					Limit:  n,
-					Offset: (1 - 1) * n,
+					Offset: 0,
 				}
 				store.EXPECT().
 					ListAccounts(gomock.Any(), gomock.Eq(arg)).
@@ -269,7 +269,7 @@ func TestGetAccountsAPI(t *testing.T) {
 			buildStubs: func(store *mockdb.MockStore) {
 				arg := db.ListAccountsParams{
 					Limit:  n,
-					Offset: (1 - 1) * n,
+					Offset: 0,
 				}
 				store.EXPECT().
 					ListAccounts(gomock.Any(), gomock.Eq(arg)).
@@ -293,7 +293,7 @@ func TestGetAccountsAPI(t *testing.T) {
 			// build stubs
 			tc.buildStubs(store)
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			url := "/accounts"
@@ -386,7 +386,7 @@ func TestDeleteAccountAPI(t *testing.T) {
 			// build stubs
 			tc.buildStubs(store)
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			url := fmt.Sprintf("/accounts/%d", tc.accountID)
@@ -500,7 +500,7 @@ func TestDebitAccountAPI(t *testing.T) {
 			// build stubs
 			tc.buildStubs(store)
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			url := fmt.Sprintf("/accounts/%d/debit", tc.accountID)
@@ -619,7 +619,7 @@ func TestCreditAccountAPI(t *testing.T) {
 			// build stubs
 			tc.buildStubs(store)
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			url := fmt.Sprintf("/accounts/%d/credit", tc.accountID)
