@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "aidanwoods",
         "alphanum",
         "caser",
         "gomock",
@@ -7,10 +8,12 @@
         "mapstructure",
         "mockdb",
         "oneof",
+        "Paseto",
         "passphabet",
         "simplebank",
         "sqlc",
         "sslmode",
-        "stretchr"
+        "stretchr",
+        "verr"
     ]
 }
