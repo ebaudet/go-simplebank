@@ -100,3 +100,27 @@ func TestListAccounts(t *testing.T) {
 		require.NotZero(t, account.CreatedAt)
 	}
 }
+
+func TestListAccountsByOwner(t *testing.T) {
+	var lastAccount Account
+	for i := 0; i < 10; i++ {
+		lastAccount, _ = createRandomAccount(t)
+	}
+
+	arg := ListAccountsByOwnerParams{
+		Owner:  lastAccount.Owner,
+		Limit:  5,
+		Offset: 0,
+	}
+
+	accounts, err := testQueries.ListAccountsByOwner(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, accounts)
+
+	for _, account := range accounts {
+		require.NotEmpty(t, account)
+		require.Equal(t, lastAccount.Owner, account.Owner)
+		require.NotZero(t, account.ID)
+		require.NotZero(t, account.CreatedAt)
+	}
+}

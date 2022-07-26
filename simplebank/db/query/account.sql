@@ -21,6 +21,13 @@ ORDER BY id
 LIMIT $1
 OFFSET $2;
 
+-- name: ListAccountsByOwner :many
+SELECT * FROM accounts
+WHERE owner = $1
+ORDER BY id
+LIMIT $2
+OFFSET $3;
+
 -- name: UpdateAccount :one
 UPDATE accounts
 set balance = $2
@@ -36,3 +43,7 @@ RETURNING *;
 -- name: DeleteAccount :exec
 DELETE FROM accounts
 WHERE id = $1;
+
+-- name: DeleteAccountOwner :exec
+DELETE FROM accounts
+WHERE id = $1 AND owner = $2;

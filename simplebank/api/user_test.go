@@ -21,7 +21,7 @@ import (
 )
 
 func randomUser() (db.User, string) {
-	password := utils.RandomPassword(int(utils.RandomInt(6, 25)))
+	password := utils.RandomPassword(6, 25)
 	hash, _ := utils.HashPassword(password)
 
 	user := db.User{

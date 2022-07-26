@@ -6,6 +6,7 @@
         "gomock",
         "gonic",
         "mapstructure",
+        "MIDDLEWARES",
         "mockdb",
         "oneof",
         "Paseto",

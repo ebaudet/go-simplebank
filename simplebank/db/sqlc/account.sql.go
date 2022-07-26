@@ -72,6 +72,21 @@ func (q *Queries) DeleteAccount(ctx context.Context, id int64) error {
 	return err
 }
 
+const deleteAccountOwner = `-- name: DeleteAccountOwner :exec
+DELETE FROM accounts
+WHERE id = $1 AND owner = $2
+`
+
+type DeleteAccountOwnerParams struct {
+	ID    int64  `json:"id"`
+	Owner string `json:"owner"`
+}
+
+func (q *Queries) DeleteAccountOwner(ctx context.Context, arg DeleteAccountOwnerParams) error {
+	_, err := q.db.ExecContext(ctx, deleteAccountOwner, arg.ID, arg.Owner)
+	return err
+}
+
 const getAccount = `-- name: GetAccount :one
 SELECT id, owner, balance, currency, created_at FROM accounts
 WHERE id = $1 LIMIT 1
@@ -123,6 +138,49 @@ type ListAccountsParams struct {
 
 func (q *Queries) ListAccounts(ctx context.Context, arg ListAccountsParams) ([]Account, error) {
 	rows, err := q.db.QueryContext(ctx, listAccounts, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Account{}
+	for rows.Next() {
+		var i Account
+		if err := rows.Scan(
+			&i.ID,
+			&i.Owner,
+			&i.Balance,
+			&i.Currency,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listAccountsByOwner = `-- name: ListAccountsByOwner :many
+SELECT id, owner, balance, currency, created_at FROM accounts
+WHERE owner = $1
+ORDER BY id
+LIMIT $2
+OFFSET $3
+`
+
+type ListAccountsByOwnerParams struct {
+	Owner  string `json:"owner"`
+	Limit  int32  `json:"limit"`
+	Offset int32  `json:"offset"`
+}
+
+func (q *Queries) ListAccountsByOwner(ctx context.Context, arg ListAccountsByOwnerParams) ([]Account, error) {
+	rows, err := q.db.QueryContext(ctx, listAccountsByOwner, arg.Owner, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

@@ -55,7 +55,11 @@ func RandomEmail() string {
 }
 
 // Generate a random password with numbers, letters and special characters
-func RandomPassword(length int) string {
+// The password will be of length n if max = 0. Or a random length between length and max
+func RandomPassword(length, max int) string {
+	if max != 0 {
+		length = int(RandomInt(int64(length), int64(max)))
+	}
 	var sb strings.Builder
 	k := len(passphabet)
 	for i := 0; i < length; i++ {

@@ -124,6 +124,20 @@ func (mr *MockStoreMockRecorder) DeleteAccount(arg0, arg1 interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAccount", reflect.TypeOf((*MockStore)(nil).DeleteAccount), arg0, arg1)
 }
 
+// DeleteAccountOwner mocks base method.
+func (m *MockStore) DeleteAccountOwner(arg0 context.Context, arg1 db.DeleteAccountOwnerParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteAccountOwner", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteAccountOwner indicates an expected call of DeleteAccountOwner.
+func (mr *MockStoreMockRecorder) DeleteAccountOwner(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAccountOwner", reflect.TypeOf((*MockStore)(nil).DeleteAccountOwner), arg0, arg1)
+}
+
 // DeleteEntry mocks base method.
 func (m *MockStore) DeleteEntry(arg0 context.Context, arg1 int64) error {
 	m.ctrl.T.Helper()
@@ -240,6 +254,21 @@ func (m *MockStore) ListAccounts(arg0 context.Context, arg1 db.ListAccountsParam
 func (mr *MockStoreMockRecorder) ListAccounts(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAccounts", reflect.TypeOf((*MockStore)(nil).ListAccounts), arg0, arg1)
+}
+
+// ListAccountsByOwner mocks base method.
+func (m *MockStore) ListAccountsByOwner(arg0 context.Context, arg1 db.ListAccountsByOwnerParams) ([]db.Account, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAccountsByOwner", arg0, arg1)
+	ret0, _ := ret[0].([]db.Account)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListAccountsByOwner indicates an expected call of ListAccountsByOwner.
+func (mr *MockStoreMockRecorder) ListAccountsByOwner(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAccountsByOwner", reflect.TypeOf((*MockStore)(nil).ListAccountsByOwner), arg0, arg1)
 }
 
 // ListEntries mocks base method.

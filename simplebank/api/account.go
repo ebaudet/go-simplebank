@@ -2,15 +2,16 @@ package api
 
 import (
 	"database/sql"
+	"errors"
 	"net/http"
 
 	db "github.com/ebaudet/simplebank/db/sqlc"
+	"github.com/ebaudet/simplebank/token"
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
 )
 
 type createAccountRequest struct {
-	Owner    string `json:"owner" binding:"required"`
 	Currency string `json:"currency" binding:"required,currency"`
 }
 
@@ -21,8 +22,10 @@ func (server *Server) createAccount(ctx *gin.Context) {
 		return
 	}
 
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
 	account_params := db.CreateAccountParams{
-		Owner:    req.Owner,
+		Owner:    authPayload.Username,
 		Balance:  0,
 		Currency: req.Currency,
 	}
@@ -64,6 +67,14 @@ func (server *Server) getAccount(ctx *gin.Context) {
 		return
 	}
 
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	if account.Owner != authPayload.Username {
+		err := errors.New("account doesn't belong to the authenticated user")
+		ctx.JSON(http.StatusForbidden, errorResponse(err))
+		return
+	}
+
 	ctx.JSON(http.StatusOK, account)
 }
 
@@ -79,11 +90,14 @@ func (server *Server) getAccounts(ctx *gin.Context) {
 		return
 	}
 
-	args := db.ListAccountsParams{
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	args := db.ListAccountsByOwnerParams{
+		Owner:  authPayload.Username,
 		Limit:  req.PageSize,
 		Offset: (req.PageID - 1) * req.PageSize,
 	}
-	accounts, err := server.store.ListAccounts(ctx, args)
+	accounts, err := server.store.ListAccountsByOwner(ctx, args)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
@@ -103,7 +117,13 @@ func (server *Server) deleteAccount(ctx *gin.Context) {
 		return
 	}
 
-	err := server.store.DeleteAccount(ctx, req.ID)
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	args := db.DeleteAccountOwnerParams{
+		ID:    req.ID,
+		Owner: authPayload.Username,
+	}
+	err := server.store.DeleteAccountOwner(ctx, args)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -125,23 +145,41 @@ type debitFormAccountRequest struct {
 }
 
 func (server *Server) debitAccount(ctx *gin.Context) {
+	// Binding the request to the struct.
 	var uri debitUriAccountRequest
 	if err := ctx.ShouldBindUri(&uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-
 	var form debitFormAccountRequest
 	if err := ctx.ShouldBindQuery(&form); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
+	// Checking if the account belongs to the user.
+	account, err := server.store.GetAccount(ctx, uri.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	if account.Owner != authPayload.Username {
+		err := errors.New("account doesn't belong to the authenticated user")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	// Debiting the amount to the account.
 	arg := db.AddAccountBalanceParams{
 		ID:     uri.ID,
 		Amount: -form.Amount,
 	}
-	account, err := server.store.AddAccountBalance(ctx, arg)
+	account, err = server.store.AddAccountBalance(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
@@ -159,23 +197,41 @@ type creditFormAccountRequest struct {
 }
 
 func (server *Server) creditAccount(ctx *gin.Context) {
+	// Binding the request to the struct.
 	var uri creditUriAccountRequest
 	if err := ctx.ShouldBindUri(&uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-
 	var form creditFormAccountRequest
 	if err := ctx.ShouldBindQuery(&form); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
+	// Checking if the account belongs to the user.
+	account, err := server.store.GetAccount(ctx, uri.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	if account.Owner != authPayload.Username {
+		err := errors.New("account doesn't belong to the authenticated user")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	// Crediting the amount to the account.
 	arg := db.AddAccountBalanceParams{
 		ID:     uri.ID,
 		Amount: form.Amount,
 	}
-	account, err := server.store.AddAccountBalance(ctx, arg)
+	account, err = server.store.AddAccountBalance(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
