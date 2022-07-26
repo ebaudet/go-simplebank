@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -249,23 +248,4 @@ func TestCreateTransferAPI(t *testing.T) {
 			tc.checkResponse(t, recorder)
 		})
 	}
-}
-
-func randomTransfer(fromAccount db.Account, toAccount db.Account) db.Transfer {
-	return db.Transfer{
-		ID:            utils.RandomInt(1, 1000),
-		FromAccountID: fromAccount.ID,
-		ToAccountID:   toAccount.ID,
-		Amount:        utils.RandomMoney(),
-	}
-}
-
-func requireBodyMatchTransfer(t *testing.T, body *bytes.Buffer, transfer db.Transfer) {
-	data, err := ioutil.ReadAll(body)
-	require.NoError(t, err)
-
-	var gotTransferTxResult db.TransferTxResult
-	err = json.Unmarshal(data, &gotTransferTxResult)
-	require.NoError(t, err)
-	require.Equal(t, transfer, gotTransferTxResult.Transfer)
 }
