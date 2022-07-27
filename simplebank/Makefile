@@ -39,4 +39,10 @@ server:
 mock:
 	mockgen -destination db/mock/store.go -build_flags=--mod=mod -package mockdb github.com/ebaudet/simplebank/db/sqlc Store
 
-.PHONY: postgres createdb dropdb new_migration migrateup migrateup1 migratedown migratedown1 sqlc test test_nocache server mock
+docker_build:
+	docker build -t simplebank:latest .
+
+docker_run:
+	docker run --name simplebank -p 8080:8080 simplebank:latest
+
+.PHONY: postgres createdb dropdb new_migration migrateup migrateup1 migratedown migratedown1 sqlc test test_nocache server mock docker_build docker_run
