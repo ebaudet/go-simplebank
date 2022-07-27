@@ -9,6 +9,9 @@ cd simplebank
 docker compose up
 ```
 
+Then it's possible to explore the API with [Postman](https://www.postman.com/) importing the following tests :
+`postman/simple_bank.postman_collection.json`
+
 ## Diagram
 
 Database diagram is done on [dbdiagram.io](https://dbdiagram.io/d/62cd1dc8cc1bc14cc59dd2c5)
